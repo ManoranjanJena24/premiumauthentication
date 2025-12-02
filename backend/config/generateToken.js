@@ -3,7 +3,7 @@ import { redisClient } from '../index.js'
 
 export const generateToken = async(id , res)=>{
     const accessToken = jwt.sign({id},process.env.JWT_SECRET , {
-        expiresIn: "1m"
+        expiresIn: "15m"
     })
 
 
@@ -17,9 +17,9 @@ export const generateToken = async(id , res)=>{
 
     res.cookie("accessToken" , accessToken ,{
         httpOnly: true ,   //backend read karr payegaa true mein false karkee document.cookie karogee milegaa cookie
-        // secure: true,        //true hhtps mein kaam karega
-        sameSite: "strict",  //csrf attack nahii hooga
-        maxAge: 1 * 60 * 1000,
+        secure: true,        //true hhtps mein kaam karega
+        sameSite: "none",  // strict---->csrf attack nahii hooga   //none----->frontend url is different frontend url is running on 5143 and
+        maxAge: 15 * 60 * 1000,
     })
 
 // refresh token kabhii bhee frontend mein chorii nahii hoonaa chahiyee 
@@ -28,6 +28,7 @@ export const generateToken = async(id , res)=>{
         maxAge: 7 * 24 *60 * 60 * 1000 ,
         httpOnly: true , 
         sameSite: "none",
+        secure:true ,
 
     })
 
