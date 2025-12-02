@@ -3,6 +3,7 @@ import { createContext } from "react";
 import { useEffect } from "react";
 import { useContext } from "react";
 import api from "../apiIntercepter";
+import { toast } from "react-toastify";
 
 const AppContext = createContext(null);
 
@@ -26,15 +27,31 @@ export const AppProvider  = ({children}) =>{
         }
     }
 
+
+    async function logoutUser (){
+        try {
+            const {data} = await api.post("api/v1/logout")
+            toast.success(data.message)
+            setIsAuth(false)
+            setUser(null)
+
+        } catch (error) {
+            console.log(error)
+            toast.error("something went wrong")
+        }
+    }
+
     useEffect(()=>{
         fetchUser()
     },[])
 
-    return(
-        <AppContext.Provider value={{setIsAuth , isAuth ,user , setUser , loading}}>
-            {children}
-        </AppContext.Provider>
-    )
+    return (
+      <AppContext.Provider
+        value={{ setIsAuth, isAuth, user, setUser, loading, logoutUser }}
+      >
+        {children}
+      </AppContext.Provider>
+    );
 }
 
 export const AppData = ()=>{

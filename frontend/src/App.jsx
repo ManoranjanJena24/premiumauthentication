@@ -1,23 +1,31 @@
-import React from 'react'
-import {BrowserRouter ,Routes , Route} from 'react-router-dom'
-import Home from "./pages/Home"
-import Login from "./pages/Login"
-import {ToastContainer} from  "react-toastify"
-import VerifyOtp from './pages/VerifyOtp'
+import React from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Home from "./pages/Home";
+import Login from "./pages/Login";
+import { ToastContainer } from "react-toastify";
+import VerifyOtp from "./pages/VerifyOtp";
+import { AppData } from "./context/AppContext";
+import Loading from "./Loading";
 
 const App = () => {
-  return <>
-  <BrowserRouter>
-  <Routes>
+  const { isAuth, loading } = AppData();
+  return (
+    <>
+      {loading ? (
+        <Loading />
+      ) : (
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={isAuth?<Home />:<Login/>} />
+            <Route path="/login" element={isAuth?<Home />:<Login/>} />
+            <Route path="/verifyotp" element={isAuth?<Home />:<VerifyOtp/>} />
+          </Routes>
 
-    <Route path="/" element={<Home/>}/>
-    <Route path="/login" element={<Login/>}/>
-    <Route path="/verifyotp" element={<VerifyOtp/>}/>
-  </Routes>
-  
-  <ToastContainer/>
-  </BrowserRouter>
-  </>
-}
+          <ToastContainer />
+        </BrowserRouter>
+      )}
+    </>
+  );
+};
 
-export default App
+export default App;
